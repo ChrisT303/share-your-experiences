@@ -1,7 +1,7 @@
 import React from 'react';
 
+import Avatar from "../../shared/components/UIElements/Avatar"
 import './UsersItem.css'
-
 
 const UsersItem = props => {
     return (
