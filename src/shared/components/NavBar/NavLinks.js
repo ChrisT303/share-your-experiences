@@ -1,9 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import "./Links.css";
+import "./NavLinks.css";
 
-const Links = (props) => {
+const NavLinks = (props) => {
   return (
     <ul className="nav-links">
       <li>
@@ -24,4 +24,4 @@ const Links = (props) => {
   );
 };
 
-export default Links;
+export default NavLinks;
