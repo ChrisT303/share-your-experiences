@@ -2,11 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Users from "./user/pages/Users";
 import NewPlace from './places/pages/NewPlace'
+import Navigation from './shared/components/NavBar/Navigation';
 
 
 const App = () => {
   return (
     <Router>
+      <Navigation/>
+      <main>
       <Switch>
       <Route path="/" exact>
         <Users />
@@ -16,6 +19,7 @@ const App = () => {
       </Route>
       <Redirect to="/"/>
       </Switch>
+      </main>
     </Router>
   );
 };
