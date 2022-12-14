@@ -3,10 +3,17 @@ import { Link } from "react-router-dom";
 
 import Header from "./Header";
 import Links from './Links';
+import NavMobile from "./NavMobile";
 import "./Navigation.css";
 
 const Navigation = (props) => {
   return (
+    <>
+    <NavMobile>
+        <nav className="main-navigation__drawer-nav">
+        <Links/>
+        </nav>
+    </NavMobile>
     <Header>
       <button className="main-navigation__menu-btn">
         <span />
@@ -18,10 +25,11 @@ const Navigation = (props) => {
         Places Visited
         </Link>
         </h1>
-      <nav>
+      <nav className="main-navigation__header-nav">
        <Links/>
       </nav>
     </Header>
+    </>
   );
 };
 
