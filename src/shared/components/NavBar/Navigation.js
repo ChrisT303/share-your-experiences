@@ -8,25 +8,26 @@ import Backdrop from "../UIElements/Backdrop";
 import "./Navigation.css";
 
 const Navigation = (props) => {
-    const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const openMenu = () => {
-        setMenuOpen(true);
-    };
+  const openMenu = () => {
+    setMenuOpen(true);
+  };
 
-    const closeMenu = () => {
-        setMenuOpen(false);
-    }
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <>
-    {menuOpen && <Backdrop onClick={closeMenu}/>}
-    {menuOpen && (
-      <NavMobile>
-        <nav className="main-navigation__drawer-nav">
-          <NavLinks />
-        </nav>
-      </NavMobile> )}
+      {menuOpen && <Backdrop onClick={closeMenu} />}
+     
+        <NavMobile show={menuOpen} onClick={closeMenu}>
+          <nav className="main-navigation__drawer-nav">
+            <NavLinks />
+          </nav>
+        </NavMobile>
+ 
       <Header>
         <button className="main-navigation__menu-btn" onClick={openMenu}>
           <span />
