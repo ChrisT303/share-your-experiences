@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import Users from "./user/pages/Users";
-import NewPlace from './places/pages/NewPlace'
+import NewPlace from './places/pages/NewPlace';
+import PlacesUser from "./places/pages/PlacesUser";
 import Navigation from './shared/components/NavBar/Navigation';
 
 
@@ -13,6 +14,9 @@ const App = () => {
       <Switch>
       <Route path="/" exact>
         <Users />
+      </Route>
+      <Route path='/:uuid/places' exact>
+        <PlacesUser/>
       </Route>
       <Route path="/places/new" exact>
         <NewPlace/>
