@@ -1,7 +1,11 @@
 import React from "react";
 
-const NewPlace = () => {
-    return <h2>New Place Page</h2>
-}
+import PlaceInput from '../../shared/components/FormElements/PlaceInput'
+import './NewPlace.css'
 
+const NewPlace = () => {
+    return <form className="place-form">
+        <PlaceInput elementToggle='input' type= "text" label="Title"/>
+    </form>;
+}
 export default NewPlace
