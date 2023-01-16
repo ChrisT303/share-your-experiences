@@ -1,6 +1,7 @@
 import React from "react";
 
 import PlaceInput from "../../shared/components/FormElements/PlaceInput";
+import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
 import "./NewPlace.css";
 
 const NewPlace = () => {
@@ -10,7 +11,7 @@ const NewPlace = () => {
         elementToggle="input"
         type="text"
         label="Title"
-        validators={[]}
+        validators={[VALIDATOR_REQUIRE()]}
         errorText="Title invalid. Please check and try again"
       />
     </form>
