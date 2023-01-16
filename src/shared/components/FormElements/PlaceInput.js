@@ -10,12 +10,7 @@ const reducerInput = (state, action) => {
         ...state,
         value: action.inputVal,
         isValid: validate(action.inputVal, action.validators),
-      };
-      case 'TOUCH':{
-       return {
-        ...state,
         isTouched: true
-       }
       };
     default:
       return state;
@@ -37,11 +32,6 @@ const PlaceInput = (props) => {
     });
   };
 
-  const touchHandler = () => {
-    dispatch ({
-        type: 'TOUCH'
-    });
-  }
 
   const elementToggle =
     props.elementToggle === "input" ? (
@@ -50,7 +40,7 @@ const PlaceInput = (props) => {
         type={props.type}
         placeholder={props.placeholder}
         onChange={inputChangeHandler}
-        onBlur={touchHandler}
+        onBlur={inputChangeHandler}
         value={inputState.value}
       />
     ) : (
@@ -58,7 +48,7 @@ const PlaceInput = (props) => {
         id={props.id}
         rows={props.rows || 3}
         onChange={inputChangeHandler}
-        onBlur={touchHandler}
+        onBlur={inputChangeHandler}
         value={inputState.value}
       />
     );
