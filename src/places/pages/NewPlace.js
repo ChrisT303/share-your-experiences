@@ -56,8 +56,13 @@ const NewPlace = () => {
     });
   }, []);
 
+  const addPlaceHandler = e => {
+    e.preventDefault();
+    console.log(formState.inputs);
+  }
+
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={addPlaceHandler}>
       <PlaceInput
         id="title"
         elementToggle="input"
@@ -72,6 +77,14 @@ const NewPlace = () => {
         elementToggle="textarea"
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
+        errorText="Please enter a valid description with at least 5 characters"
+        onInput={userInputHandler}
+      />
+          <PlaceInput
+        id="address"
+        elementToggle="input"
+        label="Address"
+        validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid description with at least 5 characters"
         onInput={userInputHandler}
       />
