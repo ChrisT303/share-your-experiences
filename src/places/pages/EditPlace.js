@@ -9,6 +9,7 @@ import {
 } from "../../shared/util/validators";
 
 import "./NewPlace.css";
+import { useForm } from "../../shared/hooks/FormHook";
 
 const PlaceHolderPlaces = [
   {
@@ -42,8 +43,24 @@ const PlaceHolderPlaces = [
 
 const EditPlace = () => {
   const placeId = useParams().placeId;
-
+  
   const foundPlace = PlaceHolderPlaces.find((p) => p.id === placeId);
+  
+  const [formState, userInputHandler ] = useForm({
+    title: {
+        value: foundPlace.title,
+        isValid: true
+    },
+    description: {
+        value: foundPlace.description,
+        isValid: true
+    }
+  }, true)
+
+  const submitEditHandler = e => {
+    e.preventDefault();
+    console.log(formState.inputs)
+  }
 
   if (!foundPlace) {
     return (
@@ -54,7 +71,7 @@ const EditPlace = () => {
   }
 
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={submitEditHandler}>
       <PlaceInput
         id="title"
         element="input"
@@ -62,9 +79,10 @@ const EditPlace = () => {
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title."
-        onInput={() => {}}
-        value={foundPlace.title}
-        valid={true}
+        onInput={userInputHandler}
+        // initializing value only
+        initialValue={formState.inputs.title.value}
+        initialValid={formState.inputs.title.isValid}
       />
       <PlaceInput
         id="description"
@@ -72,11 +90,12 @@ const EditPlace = () => {
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description with at least 5 characters."
-        onInput={() => {}}
-        value={foundPlace.description}
-        valid={true}
+        onInput={userInputHandler}
+        // initializing value only 
+        initialValue={formState.inputs.description.value}
+        initialValid={formState.inputs.description.isValid}
       />
-      <Button type="submit" disabled={true}>
+      <Button type="submit" disabled={!formState.isValid}>
         Edit Place
       </Button>
     </form>
