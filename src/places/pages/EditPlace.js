@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import PlaceInput from "../../shared/components/FormElements/PlaceInput";
@@ -42,25 +42,46 @@ const PlaceHolderPlaces = [
 ];
 
 const EditPlace = () => {
+    // const [isLoading, setIsLoading] = useState(true)
   const placeId = useParams().placeId;
-  
+
   const foundPlace = PlaceHolderPlaces.find((p) => p.id === placeId);
   
-  const [formState, userInputHandler ] = useForm({
-    title: {
+  const [formState, userInputHandler, setFormData] = useForm(
+    {
+      title: {
         value: foundPlace.title,
-        isValid: true
-    },
-    description: {
+        isValid: true,
+      },
+      description: {
         value: foundPlace.description,
-        isValid: true
-    }
-  }, true)
+        isValid: true,
+      },
+    },
+    true
+  );
 
-  const submitEditHandler = e => {
+
+  useEffect(() => {
+    setFormData(
+      {
+        title: {
+          value: foundPlace.title,
+          isValid: true,
+        },
+        description: {
+          value: foundPlace.description,
+          isValid: true,
+        },
+      },
+      true
+    );
+  }, [setFormData, foundPlace]);
+
+  const submitEditHandler = (e) => {
     e.preventDefault();
-    console.log(formState.inputs)
-  }
+    console.log(formState.inputs);
+  };
 
   if (!foundPlace) {
     return (
@@ -70,35 +91,46 @@ const EditPlace = () => {
     );
   }
 
+  if (!formState.inputs.title.value){
+    return (
+        <div className="center">
+            <h2>Loading...</h2>
+        </div>
+    )
+  }
+
   return (
-    <form className="place-form" onSubmit={submitEditHandler}>
-      <PlaceInput
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title."
-        onInput={userInputHandler}
-        // initializing value only
-        initialValue={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
-      />
-      <PlaceInput
-        id="description"
-        element="textarea"
-        label="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter a valid description with at least 5 characters."
-        onInput={userInputHandler}
-        // initializing value only 
-        initialValue={formState.inputs.description.value}
-        initialValid={formState.inputs.description.isValid}
-      />
-      <Button type="submit" disabled={!formState.isValid}>
-        Edit Place
-      </Button>
-    </form>
+    // formState.inputs.title.value && 
+    (
+      <form className="place-form" onSubmit={submitEditHandler}>
+        <PlaceInput
+          id="title"
+          elementToggle="input"
+          type="text"
+          label="Title"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid title."
+          onInput={userInputHandler}
+          // initializing value only
+          initialValue={formState.inputs.title.value}
+          initialIsValid={formState.inputs.title.isValid}
+        />
+        <PlaceInput
+          id="description"
+          elementToggle="textarea"
+          label="Description"
+          validators={[VALIDATOR_MINLENGTH(5)]}
+          errorText="Please enter a valid description with at least 5 characters."
+          onInput={userInputHandler}
+          // initializing value only
+          initialValue={formState.inputs.description.value}
+          initialIsValid={formState.inputs.description.isValid}
+        />
+        <Button type="submit" disabled={!formState.isValid}>
+          Edit Place
+        </Button>
+      </form>
+    )
   );
 };
 
