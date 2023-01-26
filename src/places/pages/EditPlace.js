@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import PlaceInput from "../../shared/components/FormElements/PlaceInput";
 import Button from "../../shared/components/FormElements/Button";
+// import Card from '../../shared/components/UIElements/Card';
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
@@ -28,7 +29,7 @@ const PlaceHolderPlaces = [
   },
   {
     id: "p2",
-    title: "Mile High Stadium",
+    title: "Broncos Stadium",
     description: "where the broncos play football",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/3/3a/Denver_Mile_High_Stadium_postcard_%28c._1970s-1980s%29.jpg",
@@ -63,19 +64,22 @@ const EditPlace = () => {
   const foundPlace = PlaceHolderPlaces.find((p) => p.id === placeId);
 
   useEffect(() => {
-    setFormData(
-      {
-        title: {
-          value: foundPlace.title,
-          isValid: true,
+    if (foundPlace) {
+      setFormData(
+        {
+          title: {
+            value: foundPlace.title,
+            isValid: true,
+          },
+          description: {
+            value: foundPlace.description,
+            isValid: true,
+          },
         },
-        description: {
-          value: foundPlace.description,
-          isValid: true,
-        },
-      },
-      true
-    );
+        true
+      );
+    }
+
     setIsLoading(false);
   }, [setFormData, foundPlace]);
 
@@ -87,7 +91,9 @@ const EditPlace = () => {
   if (!foundPlace) {
     return (
       <div className="center">
+        {/* <Card> */}
         <h2>Place not found</h2>
+        {/* </Card> */}
       </div>
     );
   }
@@ -99,7 +105,6 @@ const EditPlace = () => {
       </div>
     );
   }
-
 
   return (
     <form className="place-form" onSubmit={submitEditHandler}>
