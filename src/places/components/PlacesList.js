@@ -2,14 +2,18 @@ import React from "react";
 
 import Card from "../../shared/components/UIElements/Card";
 import PlacesItem from "./PlacesItem";
+import Button from '../../shared/components/FormElements/Button'
+
 import "./PlacesList.css";
 
 const PlacesList = (props) => {
   if (props.items.length === 0) {
     return (
-      <div className="place_list center">
-        <Card>No Places Found</Card>
-        <button>Share Place</button>
+      <div className="place-list center">
+        <Card>
+          <h2>No Places Found. Click button to create!</h2>
+        <Button to='/places/new'>Share Place</Button>
+        </Card>
       </div>
     );
   }

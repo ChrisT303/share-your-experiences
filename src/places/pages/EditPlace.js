@@ -42,25 +42,25 @@ const PlaceHolderPlaces = [
 ];
 
 const EditPlace = () => {
-    const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().placeId;
+  // ////////////////////////////
 
-  const foundPlace = PlaceHolderPlaces.find((p) => p.id === placeId);
-  
   const [formState, userInputHandler, setFormData] = useForm(
     {
       title: {
-        value: foundPlace.title,
-        isValid: true,
+        value: "",
+        isValid: false,
       },
       description: {
-        value: foundPlace.description,
-        isValid: true,
+        value: "",
+        isValid: false,
       },
     },
-    true
+    false
   );
 
+  const foundPlace = PlaceHolderPlaces.find((p) => p.id === placeId);
 
   useEffect(() => {
     setFormData(
@@ -92,46 +92,44 @@ const EditPlace = () => {
     );
   }
 
-  if (isLoading){
+  if (isLoading) {
     return (
-        <div className="center">
-            <h2>Loading...</h2>
-        </div>
-    )
+      <div className="center">
+        <h2>Loading...</h2>
+      </div>
+    );
   }
 
+
   return (
-    // formState.inputs.title.value && 
-    (
-      <form className="place-form" onSubmit={submitEditHandler}>
-        <PlaceInput
-          id="title"
-          elementToggle="input"
-          type="text"
-          label="Title"
-          validators={[VALIDATOR_REQUIRE()]}
-          errorText="Please enter a valid title."
-          onInput={userInputHandler}
-          // initializing value only
-          initialValue={formState.inputs.title.value}
-          initialIsValid={formState.inputs.title.isValid}
-        />
-        <PlaceInput
-          id="description"
-          elementToggle="textarea"
-          label="Description"
-          validators={[VALIDATOR_MINLENGTH(5)]}
-          errorText="Please enter a valid description with at least 5 characters."
-          onInput={userInputHandler}
-          // initializing value only
-          initialValue={formState.inputs.description.value}
-          initialIsValid={formState.inputs.description.isValid}
-        />
-        <Button type="submit" disabled={!formState.isValid}>
-          Edit Place
-        </Button>
-      </form>
-    )
+    <form className="place-form" onSubmit={submitEditHandler}>
+      <PlaceInput
+        id="title"
+        elementToggle="input"
+        type="text"
+        label="Title"
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="Please enter a valid title."
+        onInput={userInputHandler}
+        // initializing value only
+        initialValue={formState.inputs.title.value}
+        initialIsValid={formState.inputs.title.isValid}
+      />
+      <PlaceInput
+        id="description"
+        elementToggle="textarea"
+        label="Description"
+        validators={[VALIDATOR_MINLENGTH(5)]}
+        errorText="Please enter a valid description with at least 5 characters."
+        onInput={userInputHandler}
+        // initializing value only
+        initialValue={formState.inputs.description.value}
+        initialIsValid={formState.inputs.description.isValid}
+      />
+      <Button type="submit" disabled={!formState.isValid}>
+        Edit Place
+      </Button>
+    </form>
   );
 };
 
