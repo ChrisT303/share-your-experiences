@@ -42,7 +42,7 @@ const PlaceHolderPlaces = [
 ];
 
 const EditPlace = () => {
-    // const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().placeId;
 
   const foundPlace = PlaceHolderPlaces.find((p) => p.id === placeId);
@@ -76,6 +76,7 @@ const EditPlace = () => {
       },
       true
     );
+    setIsLoading(false);
   }, [setFormData, foundPlace]);
 
   const submitEditHandler = (e) => {
@@ -91,7 +92,7 @@ const EditPlace = () => {
     );
   }
 
-  if (!formState.inputs.title.value){
+  if (isLoading){
     return (
         <div className="center">
             <h2>Loading...</h2>
