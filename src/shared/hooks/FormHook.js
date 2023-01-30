@@ -5,6 +5,10 @@ const formStateReducer = (state, action) => {
     case "inputChange":
       let formIsValid = true;
       for (const inputID in state.inputs) {
+        if(!state.inputs[inputID]){
+            // this is so we can drop the name in Auth.js when switching forms. If undefined continue (name is undefined so we can drop it in the switch) 
+         continue;
+        }
         if (inputID === action.inputID) {
             formIsValid = formIsValid && action.isValid;
         } else {
