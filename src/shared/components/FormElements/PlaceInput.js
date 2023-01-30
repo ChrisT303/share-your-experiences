@@ -10,7 +10,7 @@ const reducerInput = (state, action) => {
         ...state,
         value: action.val,
         isValid: validate(action.val, action.validators),
-        isTouched: true
+        isTouched: true,
       };
     default:
       return state;
@@ -19,16 +19,16 @@ const reducerInput = (state, action) => {
 
 const PlaceInput = (props) => {
   const [inputState, dispatch] = useReducer(reducerInput, {
-    value: props.initialValue || '',
+    value: props.initialValue || "",
     isTouched: false,
-    isValid: props.initialIsValid|| false,
+    isValid: props.initialIsValid || false,
   });
 
-  const {id, onInput} = props;
-  const {value, isValid } = inputState
+  const { id, onInput } = props;
+  const { value, isValid } = inputState;
 
   useEffect(() => {
-    onInput(id, value, isValid)
+    onInput(id, value, isValid);
   }, [id, value, isValid, onInput]);
 
   const inputChangeHandler = (e) => {
@@ -38,7 +38,6 @@ const PlaceInput = (props) => {
       validators: props.validators,
     });
   };
-
 
   const elementToggle =
     props.elementToggle === "input" ? (
