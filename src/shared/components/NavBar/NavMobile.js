@@ -7,7 +7,7 @@ import "./NavMobile.css";
 
 const NavMobile = (props) => {
   const content = (
-    <CSSTransition in={props.show} timeout={200} callsNames="slide-in-left" mountOnEnter unmountOnExit>
+    <CSSTransition in={props.show} timeout={200} classNames="slide-in-left" mountOnEnter unmountOnExit>
       <aside className="nav-mobile" onClick={props.onClick}>{props.children}</aside>
     </CSSTransition>
   );

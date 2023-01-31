@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import PlaceInput from "../../shared/components/FormElements/PlaceInput";
 import Button from "../../shared/components/FormElements/Button";
@@ -8,10 +8,12 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/FormHook";
+import { AuthContext } from "../../shared/context/authContext";
 import "./Auth.css";
 
 const Auth = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const auth = useContext(AuthContext);
+  const [isLoggedInSubmit, setIsLoggedInSubmit] = useState(true);
   const [formState, inputChangeHandler, setFormData] = useForm(
     {
       email: {
@@ -27,7 +29,7 @@ const Auth = () => {
   );
 
   const switchToSignupHandler = (event) => {
-    if (!isLoggedIn) {
+    if (!isLoggedInSubmit) {
       setFormData(
         {
           ...formState.inputs,
@@ -47,12 +49,13 @@ const Auth = () => {
         false
       );
     }
-    setIsLoggedIn((prevMode) => !prevMode);
+    setIsLoggedInSubmit((prevMode) => !prevMode);
   };
 
   const authLoginHandler = (event) => {
     event.preventDefault();
     console.log(formState.inputs);
+    auth.login();
   };
 
   return (
@@ -60,7 +63,7 @@ const Auth = () => {
       <h2>Login</h2>
       <hr />
       <form onSubmit={authLoginHandler}>
-        {!isLoggedIn && (
+        {!isLoggedInSubmit && (
           <PlaceInput
             elementToggle="input"
             id="name"
@@ -90,11 +93,11 @@ const Auth = () => {
           onInput={inputChangeHandler}
         />
         <Button type="submit" disabled={!formState.isValid}>
-          {isLoggedIn ? "LOGIN" : "SIGNUP"}
+          {isLoggedInSubmit ? "LOGIN" : "SIGNUP"}
         </Button>
       </form>
       <Button inverse onClick={switchToSignupHandler}>
-        {isLoggedIn ? "SIGNUP" : "LOGIN"}
+        {isLoggedInSubmit ? "SIGNUP" : "LOGIN"}
       </Button>
     </Card>
   );

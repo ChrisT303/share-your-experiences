@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 
 import "./NavLinks.css";
 
 const NavLinks = (props) => {
+  const auth = useContext(AuthContext);
+
   return (
     <ul className="nav-links">
       <li>
@@ -11,15 +14,21 @@ const NavLinks = (props) => {
           All Active Members
         </NavLink>
       </li>
-      <li>
-        <NavLink to="/u1/places">Places Visited</NavLink>
-      </li>
-      <li>
-        <NavLink to="/places/new">Add New Place</NavLink>
-      </li>
-      <li>
-        <NavLink to="/auth">Validate</NavLink>
-      </li>
+      {auth.isLoggedIn && (
+        <li>
+          <NavLink to="/u1/places">Places Visited</NavLink>
+        </li>
+      )}
+      {auth.isLoggedIn && (
+        <li>
+          <NavLink to="/places/new">Add New Place</NavLink>
+        </li>
+      )}
+      {!auth.isLoggedIn && (
+        <li>
+          <NavLink to="/auth">Validate</NavLink>
+        </li>
+      )}
     </ul>
   );
 };
