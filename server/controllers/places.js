@@ -1,3 +1,5 @@
+const { v4: uuid } = require('uuid');
+
 const ErrorHandler = require("../../server/models/error.js");
 
 const fillerPlaces = [
@@ -50,5 +52,23 @@ const getByUserID = (req, res) => {
   }
 };
 
+const createPost = (req, res) => {
+    const {title, description, coordinates, address, creator} = req.body;
+    // const title = req.body.title
+    // const description = req.body.description
+    const createPlace = {
+        id: uuid(),
+        title,
+        description,
+        location: coordinates,
+        address,
+        creator
+    }
+    fillerPlaces.push(createPlace)
+
+    res.status(201).json({place: createPlace})
+}
+
 exports.getPlaceByID = getPlaceByID;
 exports.getByUserID = getByUserID;
+exports.createPost = createPost
