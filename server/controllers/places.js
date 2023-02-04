@@ -36,7 +36,7 @@ const getPlaceByID = (req, res) => {
 
 const getPlacesByUserID = (req, res) => {
   try {
-    const userID = req.params.uid;
+    const userID = req.params.uuid;
     const places = fillerPlaces.filter((p) => {
       return (p.creator = userID);
     });
@@ -89,8 +89,5 @@ const deletePlace = (req, res) => {
   res.status(200).json({message: 'Post has been deleted'})
 };
 
-exports.getPlaceByID = getPlaceByID;
-exports.getPlacesByUserID = getPlacesByUserID;
-exports.createPost = createPost;
-exports.updatePlace = updatePlace;
-exports.deletePlace = deletePlace;
+
+module.exports = {getPlaceByID, getPlacesByUserID, createPost, updatePlace, deletePlace}
