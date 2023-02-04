@@ -41,7 +41,7 @@ const getByUserID = (req, res) => {
       return (p.creator = userID);
     });
     if (!place) {
-      throw new ErrorHandler("No place found by given id", 404);
+      throw new ErrorHandler("No place found by given user id", 404);
     }
     res.json({ place });
   } catch (error) {
@@ -69,6 +69,26 @@ const createPost = (req, res) => {
     res.status(201).json({place: createPlace})
 }
 
+const updatePlace = (req, res,) => {
+    const {title, description} = req.body;
+    const placeID = req.params.placeID;
+
+    const updatePlace = {...fillerPlaces.find(p => p.id === placeID)}
+    const placeIndex = fillerPlaces.findIndex(p => p.id === placeID)
+    updatePlace.title = title
+    updatePlace.description = description
+   
+
+    fillerPlaces[placeIndex] = updatePlace;
+
+    res.status(200).json({place: updatePlace})
+}
+
+const deletePlace = (req, res) => {}
+
+
 exports.getPlaceByID = getPlaceByID;
 exports.getByUserID = getByUserID;
-exports.createPost = createPost
+exports.createPost = createPost;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;
