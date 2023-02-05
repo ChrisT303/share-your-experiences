@@ -2,6 +2,7 @@ const { v4: uuid } = require("uuid");
 const { validationResult } = require("express-validator");
 
 const ErrorHandler = require("../../server/models/error.js");
+const getAddressCoords = require('../../server/util/location.js');
 
 let fillerPlaces = [
   {
@@ -53,16 +54,25 @@ const getPlacesByUserID = (req, res) => {
   }
 };
 
-const createPost = (req, res) => {
+const createPost = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    throw new ErrorHandler("Invalid entry", 422);
+    return next (new ErrorHandler("Invalid entry", 422));
   }
 
-  const { title, description, coordinates, address, creator } = req.body;
-  // const title = req.body.title
-  // const description = req.body.description
+  const { title, description, address, creator } = req.body;
+ 
+  let coordinates;
+  try {
+    
+    coordinates = await getAddressCoords(address)
+  }catch(error){
+   return next(error)
+  }
+  
+
+
   const createPlace = {
     id: uuid(),
     title,
