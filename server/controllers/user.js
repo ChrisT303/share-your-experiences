@@ -1,4 +1,6 @@
 const { v4: uuid } = require("uuid");
+const { validationResult } = require("express-validator");
+
 const ErrorHandler = require("../../server/models/error.js");
 
 const testUsers = [
@@ -15,12 +17,16 @@ const getUser = (req, res) => {
 };
 
 const userSignup = (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      throw new ErrorHandler("Invalid entry", 422);
+    }
   const { name, email, password } = req.body;
+  const userExists = testUsers.find((user) => user.email === email);
 
-  const userExists = testUsers.find(user => user.email === email)
-
-  if(userExists){
-    throw new ErrorHandler('Error! User already exists', 422)
+  if (userExists) {
+    throw new ErrorHandler("Error! User already exists", 422);
   }
 
   const createNewUser = {
@@ -44,7 +50,7 @@ const userLogin = (req, res) => {
     throw new ErrorHandler("Could not find user with this id", 401);
   }
 
-  res.json({message: 'You are logged in!!!!'})
+  res.json({ message: "You are logged in!!!!" });
 };
 
 module.exports = { getUser, userSignup, userLogin };

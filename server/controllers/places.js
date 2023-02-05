@@ -1,4 +1,5 @@
 const { v4: uuid } = require("uuid");
+const { validationResult } = require("express-validator");
 
 const ErrorHandler = require("../../server/models/error.js");
 
@@ -53,6 +54,12 @@ const getPlacesByUserID = (req, res) => {
 };
 
 const createPost = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new ErrorHandler("Invalid entry", 422);
+  }
+
   const { title, description, coordinates, address, creator } = req.body;
   // const title = req.body.title
   // const description = req.body.description
@@ -70,6 +77,11 @@ const createPost = (req, res) => {
 };
 
 const updatePlace = (req, res) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new ErrorHandler("Invalid entry", 422);
+  }
   const { title, description } = req.body;
   const placeID = req.params.placeID;
 
@@ -84,10 +96,18 @@ const updatePlace = (req, res) => {
 };
 
 const deletePlace = (req, res) => {
+  if(fillerPlaces.find(p => p.id === placeID )) {
+    throw new ErrorHandler('No place found with this id')
+  }
   const placeIdentifier = req.params.placeID;
   fillerPlaces = fillerPlaces.filter((p) => p.id !== placeIdentifier);
-  res.status(200).json({message: 'Post has been deleted'})
+  res.status(200).json({ message: "Post has been deleted" });
 };
 
-
-module.exports = {getPlaceByID, getPlacesByUserID, createPost, updatePlace, deletePlace}
+module.exports = {
+  getPlaceByID,
+  getPlacesByUserID,
+  createPost,
+  updatePlace,
+  deletePlace,
+};
