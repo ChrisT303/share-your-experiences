@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 
 const ErrorHandler = require("../../server/models/error.js");
 const getAddressCoords = require('../../server/util/location.js');
+const Place = require('../../server/models/place.js')
 
 let fillerPlaces = [
   {

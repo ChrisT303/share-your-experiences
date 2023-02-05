@@ -1,7 +1,7 @@
 const { v4: uuid } = require("uuid");
 const { validationResult } = require("express-validator");
 
-const ErrorHandler = require("../../server/models/error.js");
+const ErrorHandler = require("../models/error.js");
 
 const testUsers = [
   {
