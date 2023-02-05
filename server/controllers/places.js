@@ -106,7 +106,7 @@ const updatePlace = (req, res) => {
 };
 
 const deletePlace = (req, res) => {
-  if(fillerPlaces.find(p => p.id === placeID )) {
+  if(fillerPlaces.find(p => p.id === placeIdentifier )) {
     throw new ErrorHandler('No place found with this id')
   }
   const placeIdentifier = req.params.placeID;
