@@ -1,23 +1,10 @@
-
 const { validationResult } = require("express-validator");
 
 const ErrorHandler = require("../models/error.js");
 const getAddressCoords = require("../util/location.js");
 const Place = require("../models/place.js");
 
-let fillerPlaces = [
-  {
-    id: "p1",
-    title: "Broncos Stadium",
-    description: "where the Broncos play football",
-    location: {
-      lat: 39.7438936,
-      lng: -105.0201094,
-    },
-    address: "1701 Bryant St, Denver, CO 80204",
-    creator: "u1",
-  },
-];
+
 
 const getPlaceByID = async (req, res, next) => {
   const placeIdentifier = req.params.placeID;
@@ -95,7 +82,7 @@ const createPost = async (req, res, next) => {
   res.status(201).json({ place: createPlace });
 };
 
-const updatePlace = (req, res) => {
+const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -104,22 +91,56 @@ const updatePlace = (req, res) => {
   const { title, description } = req.body;
   const placeID = req.params.placeID;
 
-  const updatePlace = { ...fillerPlaces.find((p) => p.id === placeID) };
-  const placeIndex = fillerPlaces.findIndex((p) => p.id === placeID);
-  updatePlace.title = title;
-  updatePlace.description = description;
+  let place;
+  try {
+    place = await Place.findById(placeID);
+  } catch (err) {
+    const error = new ErrorHandler(
+      "An error occurred, could not find. Please try again",
+      500
+    );
+    return next(error);
+  }
 
-  fillerPlaces[placeIndex] = updatePlace;
+  place.title = title;
+  place.description = description;
 
-  res.status(200).json({ place: updatePlace });
+  try {
+    await place.save();
+  } catch (err) {
+    const error = new ErrorHandler(
+      "An error occurred, could not update. Please try again",
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ place: place.toObject({ getters: true }) });
 };
 
-const deletePlace = (req, res) => {
-  if (fillerPlaces.find((p) => p.id === placeIdentifier)) {
-    throw new ErrorHandler("No place found with this id");
-  }
+const deletePlace = async (req, res, next) => {
   const placeIdentifier = req.params.placeID;
-  fillerPlaces = fillerPlaces.filter((p) => p.id !== placeIdentifier);
+
+  let place;
+  try {
+    place = await Place.findById(placeIdentifier);
+  } catch (err) {
+    const error = new ErrorHandler(
+      '"An error occurred, could not delete. Please try again"',
+      500
+    );
+    return next(error);
+  }
+
+  try {
+    await place.remove();
+  } catch (err) {
+    const error = new ErrorHandler(
+      "An error occurred, could not delete. Please try again",
+      500
+    );
+    return next(error);
+  }
   res.status(200).json({ message: "Post has been deleted" });
 };
 
