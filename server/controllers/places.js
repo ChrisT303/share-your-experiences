@@ -3,8 +3,8 @@ const { validationResult } = require("express-validator");
 const ErrorHandler = require("../models/error.js");
 const getAddressCoords = require("../util/location.js");
 const Place = require("../models/place.js");
-
-
+const User = require("../models/user");
+const { default: mongoose } = require("mongoose");
 
 const getPlaceByID = async (req, res, next) => {
   const placeIdentifier = req.params.placeID;
@@ -72,8 +72,29 @@ const createPost = async (req, res, next) => {
     creator,
   });
 
+  let user;
+
   try {
-    await createPlace.save();
+    user = await User.findById(creator);
+  } catch (err) {
+    const error = new ErrorHandler("An error occurred, please try again", 500);
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new ErrorHandler("No user exists with this ID", 404);
+    return next(error);
+  }
+
+  console.log(user);
+
+  try {
+    const mongoSession = await mongoose.startSession();
+    mongoSession.startTransaction();
+    await createPlace.save({ session: mongoSession });
+    user.places.push(createPlace);
+    await user.save({ session: mongoSession });
+    await mongoSession.commitTransaction();
   } catch (err) {
     const error = new ErrorHandler("Post failed. Please try again", 500);
     return next(error);
@@ -86,7 +107,7 @@ const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    throw new ErrorHandler("Invalid entry", 422);
+    return next(new ErrorHandler("Invalid entry", 422));
   }
   const { title, description } = req.body;
   const placeID = req.params.placeID;
